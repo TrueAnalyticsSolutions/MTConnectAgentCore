@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace MTConnectAgentCore {
   public static class MTConnectNameSpace {
-    private static string mtcVersion = "1.2";
+    private static string mtcVersion = "1.1";
     private static string mtcUrn = "urn:mtconnect.org:MTConnect";
     private static string mtcHttp = "http://mtconnect.org/schemas/MTConnect";
     public static XNamespace mtcUrnError {
