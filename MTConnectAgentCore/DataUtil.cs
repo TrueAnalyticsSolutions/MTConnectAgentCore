@@ -56,10 +56,10 @@ namespace MTConnectAgentCore {
 
     internal static XElement getDevice(XElement probe, String deviceId, StreamWriter writer, Data data, XmlNamespaceManager namespaceManager) {
 
-      XElement devices = probe.Element(MTConnectNameSpace.mtDevices + "Devices");
+      XElement devices = probe.Element(MTConnectNameSpace.mtcUrnDevices + "Devices");
       if (devices != null) {
 
-        IEnumerable<XElement> deviceset = devices.Elements(MTConnectNameSpace.mtDevices + "Device");
+        IEnumerable<XElement> deviceset = devices.Elements(MTConnectNameSpace.mtcUrnDevices + "Device");
         XElement device = null;
         foreach (XElement de in deviceset) {
           if (de.Attribute("name").Value == deviceId)
@@ -85,7 +85,7 @@ namespace MTConnectAgentCore {
     //Remove ComponentStream if its Samples or Events have no child elements
     internal static XElement trimStream(XElement _s, String deviceId, XmlNamespaceManager namespaceManager)//changed
     {
-      IEnumerable<XElement> componentStreams = _s.Descendants(MTConnectNameSpace.mtStreams + "ComponentStream");
+      IEnumerable<XElement> componentStreams = _s.Descendants(MTConnectNameSpace.mtcUrnStreams + "ComponentStream");
 
 
       for (int i = 0; i < componentStreams.Count(); i++) {
@@ -93,13 +93,13 @@ namespace MTConnectAgentCore {
         int e_counter = 0;
         int c_counter = 0;
         XElement cs = componentStreams.ElementAt(i);
-        XElement samples = cs.Element(MTConnectNameSpace.mtStreams + "Samples");
+        XElement samples = cs.Element(MTConnectNameSpace.mtcUrnStreams + "Samples");
         if (samples != null)
           s_counter = samples.Elements().Count();
-        XElement events = cs.Element(MTConnectNameSpace.mtStreams + "Events");
+        XElement events = cs.Element(MTConnectNameSpace.mtcUrnStreams + "Events");
         if (events != null)
           e_counter = events.Elements().Count();
-        XElement condition = cs.Element(MTConnectNameSpace.mtStreams + "Condition");
+        XElement condition = cs.Element(MTConnectNameSpace.mtcUrnStreams + "Condition");
         if (condition != null)
           c_counter = condition.Elements().Count();
         if (s_counter == 0 && samples != null)
@@ -116,7 +116,7 @@ namespace MTConnectAgentCore {
 
       }
 
-      IEnumerable<XElement> devices = _s.Descendants(MTConnectNameSpace.mtStreams + "DeviceStream");
+      IEnumerable<XElement> devices = _s.Descendants(MTConnectNameSpace.mtcUrnStreams + "DeviceStream");
       if (deviceId != null) {
         for (int i = 0; i < devices.Count(); i++) {
           XElement device = devices.ElementAt(i);
@@ -176,15 +176,15 @@ namespace MTConnectAgentCore {
       sequence = 1;
       bufferSizeCounter = 0;
 
-      XElement devices = new XElement(_probe.Element(MTConnectNameSpace.mtDevices + "Devices"));
+      XElement devices = new XElement(_probe.Element(MTConnectNameSpace.mtcUrnDevices + "Devices"));
       //XElement devices = _probe.Element(MTConnectNameSpace.mtDevices + "Devices");
 
-      IEnumerable<XElement> dataItems = devices.Descendants(MTConnectNameSpace.mtDevices + "DataItem");
+      IEnumerable<XElement> dataItems = devices.Descendants(MTConnectNameSpace.mtcUrnDevices + "DataItem");
 
 
       foreach (XElement dataItem in dataItems) {
         if (!dataItem.HasElements) {
-          XElement InitialData = new XElement(MTConnectNameSpace.mtDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
+          XElement InitialData = new XElement(MTConnectNameSpace.mtcUrnDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
           if (dataItem.Attribute("category").Value == "CONDITION") {
             InitialData.Add(new XAttribute("condition", "Unavailable"));
           }
@@ -196,8 +196,8 @@ namespace MTConnectAgentCore {
           dataItem.Add(InitialData);
           sequence++;
           bufferSizeCounter++;
-        } else if (dataItem.Element(MTConnectNameSpace.mtDevices + "Constraints").Elements().Count() == 1) {
-          XElement InitialData = new XElement(MTConnectNameSpace.mtDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
+        } else if (dataItem.Element(MTConnectNameSpace.mtcUrnDevices + "Constraints").Elements().Count() == 1) {
+          XElement InitialData = new XElement(MTConnectNameSpace.mtcUrnDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
           if (dataItem.Attribute("category").Value == "CONDITION") {
             InitialData.Add(new XAttribute("condition", "Unavailable"));
           }
@@ -205,12 +205,12 @@ namespace MTConnectAgentCore {
             InitialData.Add(new XAttribute("code", "OTHER"), new XAttribute("nativeCode", "UNAVAILABLE"));
 
           }
-          InitialData.SetValue(dataItem.Element(MTConnectNameSpace.mtDevices + "Constraints").Element(MTConnectNameSpace.mtDevices + "Value").Value);
+          InitialData.SetValue(dataItem.Element(MTConnectNameSpace.mtcUrnDevices + "Constraints").Element(MTConnectNameSpace.mtcUrnDevices + "Value").Value);
           dataItem.Add(InitialData);
           sequence++;
           bufferSizeCounter++;
-        } else if (dataItem.Element(MTConnectNameSpace.mtDevices + "Constraints").Elements().Count() > 1) {
-          XElement InitialData = new XElement(MTConnectNameSpace.mtDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
+        } else if (dataItem.Element(MTConnectNameSpace.mtcUrnDevices + "Constraints").Elements().Count() > 1) {
+          XElement InitialData = new XElement(MTConnectNameSpace.mtcUrnDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
           if (dataItem.Attribute("category").Value == "CONDITION") {
             InitialData.Add(new XAttribute("condition", "Unavailable"));
           }
@@ -239,10 +239,10 @@ namespace MTConnectAgentCore {
     }
 
     internal static void handleComponent(ref XElement component, ref long sequence, ref int bufferSizeCounter, XmlNamespaceManager namespaceManager) {
-      IEnumerable<XElement> dataItems = component.Element(MTConnectNameSpace.mtDevices + "DataItems").Elements(MTConnectNameSpace.mtDevices + "DataItem");
+      IEnumerable<XElement> dataItems = component.Element(MTConnectNameSpace.mtcUrnDevices + "DataItems").Elements(MTConnectNameSpace.mtcUrnDevices + "DataItem");
       if (dataItems.Count() > 0) {
         foreach (XElement da in dataItems) {
-          XElement InitialData = new XElement(MTConnectNameSpace.mtDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
+          XElement InitialData = new XElement(MTConnectNameSpace.mtcUrnDevices + "Data", new XAttribute("timestamp", Util.GetDateTime()), new XAttribute("sequence", sequence.ToString()));
           if (da.Attribute("category").Value == "CONDITION") {
             InitialData.Add(new XAttribute("condition", "Unavailable"));
           }
@@ -252,7 +252,7 @@ namespace MTConnectAgentCore {
           bufferSizeCounter++;
         }
       }
-      IEnumerable<XElement> components = component.Element(MTConnectNameSpace.mtDevices + "Components").Elements();
+      IEnumerable<XElement> components = component.Element(MTConnectNameSpace.mtcUrnDevices + "Components").Elements();
       if (components.Count() > 0) {
         foreach (XElement subcomponent in components) {
           XElement component2 = subcomponent;
@@ -265,8 +265,8 @@ namespace MTConnectAgentCore {
     }
 
     internal static XElement createStreams(XElement _probe, XmlNamespaceManager namespaceManager) {
-      XElement streams = new XElement(MTConnectNameSpace.mtStreams + "Streams");
-      IEnumerable<XElement> devices = _probe.Element(MTConnectNameSpace.mtDevices + "Devices").Elements(MTConnectNameSpace.mtDevices + "Device");
+      XElement streams = new XElement(MTConnectNameSpace.mtcUrnStreams + "Streams");
+      IEnumerable<XElement> devices = _probe.Element(MTConnectNameSpace.mtcUrnDevices + "Devices").Elements(MTConnectNameSpace.mtcUrnDevices + "Device");
       foreach (XElement d in devices) {
         String devicename = d.Attribute("name").Value;
         String uuid = ""; //uuid is optional as of 7/1/08
@@ -274,7 +274,7 @@ namespace MTConnectAgentCore {
         if ((temp = d.Attribute("uuid")) != null)
           uuid = temp.Value;
 
-        XElement devicestream = new XElement(MTConnectNameSpace.mtStreams + "DeviceStream", new XAttribute("name", devicename), new XAttribute("uuid", uuid));
+        XElement devicestream = new XElement(MTConnectNameSpace.mtcUrnStreams + "DeviceStream", new XAttribute("name", devicename), new XAttribute("uuid", uuid));
         devicestream.Add(DataUtil.CreateComponentStream(d));
         handleComponents(ref devicestream, d, namespaceManager);
         streams.Add(devicestream);
@@ -284,7 +284,7 @@ namespace MTConnectAgentCore {
 
     //create <ComponentStream> if <Components>'s child element is not <DataItems>
     internal static void handleComponents(ref XElement _devicestream, XElement device, XmlNamespaceManager namespaceManager) {
-      IEnumerable<XElement> componentsList = device.Elements(MTConnectNameSpace.mtDevices + "Components");
+      IEnumerable<XElement> componentsList = device.Elements(MTConnectNameSpace.mtcUrnDevices + "Components");
       foreach (XElement componentsElement in componentsList) {
         foreach (XElement ctemp in componentsElement.Elements()) {
           String ename = ctemp.Name.LocalName;
@@ -305,10 +305,10 @@ namespace MTConnectAgentCore {
     }
 
     internal static XElement CreateComponentStream(XElement _ele) {
-      XElement cs = new XElement(MTConnectNameSpace.mtStreams + "ComponentStream", new XAttribute("component", _ele.Name.LocalName), new XAttribute("name", _ele.Attribute("name").Value), new XAttribute("componentId", _ele.Attribute("id").Value));
+      XElement cs = new XElement(MTConnectNameSpace.mtcUrnStreams + "ComponentStream", new XAttribute("component", _ele.Name.LocalName), new XAttribute("name", _ele.Attribute("name").Value), new XAttribute("componentId", _ele.Attribute("id").Value));
       ArrayList categories = GetDataItemCategories(_ele);
       foreach (String s in categories) {
-        cs.Add(new XElement(MTConnectNameSpace.mtStreams + s)); //<Samples> or <Events>or <Condition> in <ComponentStream>
+        cs.Add(new XElement(MTConnectNameSpace.mtcUrnStreams + s)); //<Samples> or <Events>or <Condition> in <ComponentStream>
       }
       return cs;
     }
@@ -344,9 +344,9 @@ namespace MTConnectAgentCore {
       bool hasSample = false;
       bool hasEvent = false;
       bool hasCondition = false;
-      XElement dataitemsEle = _ele.Element(MTConnectNameSpace.mtDevices + "DataItems");
+      XElement dataitemsEle = _ele.Element(MTConnectNameSpace.mtcUrnDevices + "DataItems");
       if (dataitemsEle != null) {
-        IEnumerable<XElement> dataitems = dataitemsEle.Elements(MTConnectNameSpace.mtDevices + "DataItem");
+        IEnumerable<XElement> dataitems = dataitemsEle.Elements(MTConnectNameSpace.mtcUrnDevices + "DataItem");
         foreach (XElement di in dataitems) {
           String category = di.Attribute("category").Value;
           if (category.Equals("SAMPLE")) {
@@ -402,10 +402,10 @@ namespace MTConnectAgentCore {
       String category = _dataItem_category;
       XElement re;
       if (category == "CONDITION") {
-        re = new XElement(MTConnectNameSpace.mtStreams + data.Attribute("condition").Value, new XAttribute("dataItemId", _dataItem_id), new XAttribute("type", _dataitem_type), new XAttribute("timestamp", timestamp), new XAttribute("sequence", sequence));
+        re = new XElement(MTConnectNameSpace.mtcUrnStreams + data.Attribute("condition").Value, new XAttribute("dataItemId", _dataItem_id), new XAttribute("type", _dataitem_type), new XAttribute("timestamp", timestamp), new XAttribute("sequence", sequence));
         //re = new XElement(data.Attribute("condition").Value, new XAttribute("dataItemId", _dataItem_id), new XAttribute("type", _dataitem_type), new XAttribute("timestamp", timestamp), new XAttribute("sequence", sequence));
       } else {
-        re = new XElement(MTConnectNameSpace.mtStreams + eleName, new XAttribute("dataItemId", _dataItem_id), new XAttribute("timestamp", timestamp), new XAttribute("sequence", sequence));
+        re = new XElement(MTConnectNameSpace.mtcUrnStreams + eleName, new XAttribute("dataItemId", _dataItem_id), new XAttribute("timestamp", timestamp), new XAttribute("sequence", sequence));
         //re = new XElement(eleName, new XAttribute("dataItemId", _dataItem_id), new XAttribute("timestamp", timestamp), new XAttribute("sequence", sequence));
       }
       if (data.Attribute("code") != null)

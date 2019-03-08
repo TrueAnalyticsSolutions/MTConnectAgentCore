@@ -13,7 +13,7 @@ using System.IO;
 using System.Threading;
 using System.Xml.Schema;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 //using Altova.AltovaXML;
 
 namespace MTConnectAgentCore {
@@ -72,12 +72,12 @@ namespace MTConnectAgentCore {
 
         //XmlNameTable nameTable = probe2.NameTable;
         namespaceManager = new XmlNamespaceManager(nameTable);
-        if (prefix == null) { namespaceManager.AddNamespace(string.Empty, MTConnectNameSpace.mtConnectUriDevices); } else {
-          namespaceManager.AddNamespace(prefix, MTConnectNameSpace.mtConnectUriDevices);
+        if (prefix == null) { namespaceManager.AddNamespace(string.Empty, MTConnectNameSpace.mtcUrnDevicesString); } else {
+          namespaceManager.AddNamespace(prefix, MTConnectNameSpace.mtcUrnDevicesString);
 
         }
-        namespaceManager.AddNamespace("mts", MTConnectNameSpace.mtConnectUriStreams);
-        namespaceManager.AddNamespace("mt", MTConnectNameSpace.mtConnectUriDevices);
+        namespaceManager.AddNamespace("mts", MTConnectNameSpace.mtcUrnStreamsString);
+        namespaceManager.AddNamespace("mt", MTConnectNameSpace.mtcUrnDevicesString);
         //namespaceManager.AddNamespace(MTConnectNameSpace.mtConnectPrefix, MTConnectNameSpace.mtConnectUriError);
       } catch (Exception e) {
         LogToFile.Log("Devices.xml Error: " + e);
@@ -112,7 +112,7 @@ namespace MTConnectAgentCore {
         //XmlReader schemaStream = XmlReader.Create("MTConnectDevices.xsd");
         XmlSchemaSet sc = new XmlSchemaSet();
         // sc.Add("urn:mtconnect.org:MTConnectDevices:1.1", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + Path.DirectorySeparatorChar + "MTConnectDevices.xsd");
-        sc.Add("urn:mtconnect.org:MTConnectDevices:1.1", new XmlTextReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("MTConnectAgentCore.MTConnectDevices.xsd")));
+        sc.Add(MTConnectNameSpace.mtcUrnDevicesString, new XmlTextReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("MTConnectAgentCore.MTConnectDevices.xsd")));
 
         XmlReaderSettings settings = new XmlReaderSettings();
         settings.ValidationType = ValidationType.Schema;
@@ -130,7 +130,7 @@ namespace MTConnectAgentCore {
         LogToFile.Log("loadConfig Error[1]: " + e);
       }
 
-      XElement header = probe.Element(MTConnectNameSpace.mtDevices + "Header");
+      XElement header = probe.Element(MTConnectNameSpace.mtcUrnDevices + "Header");
       try {
         this.buffersize = Int32.Parse(header.Attribute("bufferSize").Value);
       } catch (Exception e) {
@@ -287,7 +287,7 @@ namespace MTConnectAgentCore {
           XElement dataItemNameElement = di.Parent.Parent;
 
 
-          IEnumerable<XElement> componentStreams = deviceStream.Descendants(MTConnectNameSpace.mtStreams + "ComponentStream");
+          IEnumerable<XElement> componentStreams = deviceStream.Descendants(MTConnectNameSpace.mtcUrnStreams + "ComponentStream");
           XElement componentStream = null;
           foreach (XElement cStream in componentStreams) {
 
@@ -298,9 +298,9 @@ namespace MTConnectAgentCore {
           //query category Samples or Events to place data
           XElement samplesOrEventsOrCondition;
           if (dataItem_category != "CONDITION") {
-            samplesOrEventsOrCondition = componentStream.Element(MTConnectNameSpace.mtStreams + DataUtil.modifyString1(dataItem_category) + "s"); //get Samples or Events from SAMPLE or EVENT
+            samplesOrEventsOrCondition = componentStream.Element(MTConnectNameSpace.mtcUrnStreams + DataUtil.modifyString1(dataItem_category) + "s"); //get Samples or Events from SAMPLE or EVENT
           } else {
-            samplesOrEventsOrCondition = componentStream.Element(MTConnectNameSpace.mtStreams + "Condition");
+            samplesOrEventsOrCondition = componentStream.Element(MTConnectNameSpace.mtcUrnStreams + "Condition");
           }
 
           if (current) {
@@ -789,7 +789,7 @@ namespace MTConnectAgentCore {
       XElement device = DataUtil.getDevice(probe, deviceId, writer, this, namespaceManager);
       if (device != null) {
         //create new XElment Devices and put add device
-        XElement newDevices = new XElement(MTConnectNameSpace.mtDevices + "Devices", device);
+        XElement newDevices = new XElement(MTConnectNameSpace.mtcUrnDevices + "Devices", device);
         XElement header = getProbeHeader();
         XElement mtxst = Util.createDeviceXST();
         mtxst.Add(header);
@@ -821,13 +821,13 @@ namespace MTConnectAgentCore {
     }
 
     private void resetProbeHeader() {
-      probe.Element(MTConnectNameSpace.mtDevices + "Header").SetAttributeValue("creationTime", Util.GetDateTime());
-      probe.Element(MTConnectNameSpace.mtDevices + "Header").SetAttributeValue("instanceId", instanceId);
+      probe.Element(MTConnectNameSpace.mtcUrnDevices + "Header").SetAttributeValue("creationTime", Util.GetDateTime());
+      probe.Element(MTConnectNameSpace.mtcUrnDevices + "Header").SetAttributeValue("instanceId", instanceId);
     }
 
     public XElement getErrorHeader() {
       XElement header =
-          new XElement(MTConnectNameSpace.mtError + "Header",
+          new XElement(MTConnectNameSpace.mtcUrnError + "Header",
               new XAttribute("creationTime", Util.GetDateTime()),
               new XAttribute("instanceId", instanceId),
               new XAttribute("sender", sender),
@@ -839,7 +839,7 @@ namespace MTConnectAgentCore {
 
     public XElement getProbeHeader() {
       XElement header =
-          new XElement(MTConnectNameSpace.mtDevices + "Header",
+          new XElement(MTConnectNameSpace.mtcUrnDevices + "Header",
               new XAttribute("creationTime", Util.GetDateTime()),
               new XAttribute("instanceId", instanceId),
               new XAttribute("sender", sender),
@@ -883,7 +883,7 @@ namespace MTConnectAgentCore {
     private XElement getHeader(long nextSequence)//changed
     {
       XElement header =
-          new XElement(MTConnectNameSpace.mtStreams + "Header",
+          new XElement(MTConnectNameSpace.mtcUrnStreams + "Header",
               new XAttribute("creationTime", Util.GetDateTime()),
               new XAttribute("instanceId", instanceId),
               new XAttribute("nextSequence", nextSequence.ToString()),
