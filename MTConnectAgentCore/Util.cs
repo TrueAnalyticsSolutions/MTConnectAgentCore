@@ -167,29 +167,29 @@ namespace MTConnectAgentCore {
       XElement root = null;
       if (elementName.Equals("MTConnectStreams")) {
         if (Data.prefix != null) {
-          root = new XElement(MTConnectNameSpace.mtStreams + elementName,
+          root = new XElement(MTConnectNameSpace.mtcUrnStreams + elementName,
 
-       new XAttribute(XNamespace.Xmlns + Data.prefix, "urn:mtconnect.org:MTConnectStreams:1.1"), new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", "urn:mtconnect.org:MTConnectStreams:1.1 http://mtconnect.org/schemas/MTConnectStreams_1.1.xsd"));
+       new XAttribute(XNamespace.Xmlns + Data.prefix, MTConnectNameSpace.mtcUrnStreams), new XAttribute(XNamespace.Xmlns + "xsi", MTConnectNameSpace.xsi), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation",  MTConnectNameSpace.mtcUrnStreams + " " + MTConnectNameSpace.mtcStreamsXsd));
         } else {
-          root = new XElement(MTConnectNameSpace.mtStreams + elementName,
-              new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", "urn:mtconnect.org:MTConnectStreams:1.1 http://mtconnect.org/schemas/MTConnectStreams_1.1.xsd"));
+          root = new XElement(MTConnectNameSpace.mtcUrnStreams + elementName,
+              new XAttribute(XNamespace.Xmlns + "xsi", MTConnectNameSpace.xsi ), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", MTConnectNameSpace.mtcUrnStreams + " " + MTConnectNameSpace.mtcStreamsXsd));
         }
 
       } else if (elementName.Equals("MTConnectDevices")) {
         if (Data.prefix != null) {
-          root = new XElement(MTConnectNameSpace.mtDevices + elementName,
-          new XAttribute(XNamespace.Xmlns + Data.prefix, "urn:mtconnect.org:MTConnectDevices:1.1"), new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", "urn:mtconnect.org:MTConnectDevices:1.1 http://mtconnect.org/schemas/MTConnectDevices_1.1.xsd"));
+          root = new XElement(MTConnectNameSpace.mtcUrnDevices + elementName,
+          new XAttribute(XNamespace.Xmlns + Data.prefix, MTConnectNameSpace.mtcUrnDevices), new XAttribute(XNamespace.Xmlns + "xsi", MTConnectNameSpace.xsi), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", MTConnectNameSpace.mtcUrnDevices + " " + MTConnectNameSpace.mtcDevicesXsd));
         } else {
-          root = new XElement(MTConnectNameSpace.mtDevices + elementName,
-                 new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", "urn:mtconnect.org:MTConnectDevices:1.1 http://mtconnect.org/schemas/MTConnectDevices_1.1.xsd"));
+          root = new XElement(MTConnectNameSpace.mtcUrnDevices + elementName,
+                 new XAttribute(XNamespace.Xmlns + "xsi",MTConnectNameSpace.xsi), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", MTConnectNameSpace.mtcUrnDevices + " " + MTConnectNameSpace.mtcDevicesXsd));
         }
       } else if (elementName.Equals("MTConnectError")) {
         if (Data.prefix != null) {
-          root = new XElement(MTConnectNameSpace.mtError + elementName,
-      new XAttribute(XNamespace.Xmlns + Data.prefix, "urn:mtconnect.org:MTConnectError:1.1"), new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", "urn:mtconnect.org:MTConnectError:1.1 http://mtconnect.org/schemas/MTConnectError_1.1.xsd"));
+          root = new XElement(MTConnectNameSpace.mtcUrnError + elementName,
+      new XAttribute(XNamespace.Xmlns + Data.prefix, MTConnectNameSpace.mtcUrnError), new XAttribute(XNamespace.Xmlns + "xsi", MTConnectNameSpace.xsi), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", MTConnectNameSpace.mtcUrnError + " " + MTConnectNameSpace.mtcErrorXsd));
         } else {
-          root = new XElement(MTConnectNameSpace.mtError + elementName,
-          new XAttribute(XNamespace.Xmlns + "xsi", "http://www.w3.org/2001/XMLSchema-instance"), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", "urn:mtconnect.org:MTConnectError:1.1 http://mtconnect.org/schemas/MTConnectError_1.1.xsd"));
+          root = new XElement(MTConnectNameSpace.mtcUrnError + elementName,
+          new XAttribute(XNamespace.Xmlns + "xsi", MTConnectNameSpace.xsi), new XAttribute(MTConnectNameSpace.xsi + "schemaLocation", MTConnectNameSpace.mtcUrnError + " " + MTConnectNameSpace.mtcErrorXsd));
         }
 
       }

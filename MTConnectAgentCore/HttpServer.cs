@@ -105,7 +105,7 @@ namespace MTConnectAgentCore {
 
     private short process2(HttpListenerRequest request, StreamWriter writer) {
       if (request.RawUrl.Equals("/")) {
-        (new XElement(MTConnectNameSpace.mtStreams + "MTConnectAgent", new XAttribute("state", "RUNNING"))).Save(writer);
+        (new XElement(MTConnectNameSpace.mtcUrnStreams + "MTConnectAgent", new XAttribute("state", "RUNNING"))).Save(writer);
         return ReturnValue.ERROR;
       }
       //segument[0] = / segumens[1] = sample, for http:/127.0.0.1/sample?path= is 
@@ -353,7 +353,7 @@ namespace MTConnectAgentCore {
             storeSampleReturn = sharedData.StoreSample(timestamp, dataItemId, value);
 
             if (storeSampleReturn == ReturnValue.SUCCESS)
-              returnElement = new XElement(MTConnectNameSpace.mtStreams + "Acknowledge", new XAttribute("dateTime", Util.GetDateTime()));
+              returnElement = new XElement(MTConnectNameSpace.mtcUrnStreams + "Acknowledge", new XAttribute("dateTime", Util.GetDateTime()));
             else //not currently used
               returnElement = MachineAPIError.createError(MachineAPIError.UNRECOGNIZEDDATA);
           } catch (AgentException e) {
@@ -381,7 +381,7 @@ namespace MTConnectAgentCore {
             storeEventReturn = sharedData.StoreEvent(timestamp, dataItemId, value, code, nativeCode);
 
             if (storeEventReturn == ReturnValue.SUCCESS)
-              returnElement = new XElement(MTConnectNameSpace.mtStreams + "Acknowledge", new XAttribute("dateTime", Util.GetDateTime()));
+              returnElement = new XElement(MTConnectNameSpace.mtcUrnStreams + "Acknowledge", new XAttribute("dateTime", Util.GetDateTime()));
             else //not possible
               returnElement = MachineAPIError.createError(MachineAPIError.UNRECOGNIZEDDATA);
           } catch (AgentException e) {
@@ -410,7 +410,7 @@ namespace MTConnectAgentCore {
             storeConditionReturn = sharedData.StoreCondition(timestamp, dataItemId, condition, value, nativeCode, code);
 
             if (storeConditionReturn == ReturnValue.SUCCESS)
-              returnElement = new XElement(MTConnectNameSpace.mtStreams + "Acknowledge", new XAttribute("dateTime", Util.GetDateTime()));
+              returnElement = new XElement(MTConnectNameSpace.mtcUrnStreams + "Acknowledge", new XAttribute("dateTime", Util.GetDateTime()));
             else //not possible
               returnElement = MachineAPIError.createError(MachineAPIError.UNRECOGNIZEDDATA);
           } catch (AgentException e) {
