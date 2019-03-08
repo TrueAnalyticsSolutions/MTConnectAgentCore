@@ -23,10 +23,10 @@ namespace MTConnectAgentCore {
       XElement mtxst = Util.createErrorXST();
       String[] errorDescription = getErrorCode(_errorCode);
       XElement error =
-          new XElement(MTConnectNameSpace.mtError + "Error",
+          new XElement(MTConnectNameSpace.mtcUrnError + "Error",
               new XAttribute("errorCode", errorDescription[0]), errorDescription[1]);
       XElement errors =
-          new XElement(MTConnectNameSpace.mtError + "Errors");
+          new XElement(MTConnectNameSpace.mtcUrnError + "Errors");
       errors.Add(error);
       mtxst.Add(errors);
       XElement header = _data.getErrorHeader();
@@ -40,9 +40,9 @@ namespace MTConnectAgentCore {
       XElement mtxst = Util.createErrorXST();
       String[] errorDescription = getErrorCode(_errorCode);
       XElement error =
-          new XElement(MTConnectNameSpace.mtError + "Error",
+          new XElement(MTConnectNameSpace.mtcUrnError + "Error",
               new XAttribute("errorCode", errorDescription[0]), errorDescription[1] + " " + _extra);
-      XElement errors = new XElement(MTConnectNameSpace.mtError + "Errors");
+      XElement errors = new XElement(MTConnectNameSpace.mtcUrnError + "Errors");
       errors.Add(error);
       mtxst.Add(errors);
       XElement header = _data.getErrorHeader();
